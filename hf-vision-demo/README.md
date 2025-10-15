@@ -49,12 +49,17 @@ An interactive real-time demo showcasing the **3 most popular computer vision mo
 
 ### Prerequisites
 
-- **Python 3.9+** (3.10+ recommended)
-- **Webcam** (built-in or external)
-- **4GB+ RAM** (8GB+ recommended for optimal performance)
 - **Modern web browser** (Chrome, Firefox, Safari, Edge)
+- **Webcam** (built-in or external)
+- **Internet connection** (for initial model download)
 
-### Installation
+### 🌐 Live Demo
+
+**Deployed on Vercel:** [https://hf-vision-demo.vercel.app](https://hf-vision-demo.vercel.app)
+
+No installation required! Just visit the link and start using AI models directly in your browser.
+
+### Local Development
 
 1. **Clone the repository**:
 
@@ -63,32 +68,27 @@ An interactive real-time demo showcasing the **3 most popular computer vision mo
    cd huggin-face/hf-vision-demo
    ```
 
-2. **Create virtual environment**:
+2. **Start a local server**:
 
    ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   # Using Python
+   python -m http.server 8080
+
+   # Or using Node.js
+   npx serve .
+
+   # Or using any other static server
    ```
 
-3. **Install dependencies**:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Start the backend server**:
-
-   ```bash
-   uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
-   ```
-
-5. **Open the frontend**:
-   - Open `frontend/index.html` in your browser
-   - Or serve with a local server: `python -m http.server 3000`
+3. **Access the application**:
+   - Open your browser and go to `http://localhost:8080`
+   - Allow camera access when prompted
+   - Wait for models to load (first time may take a few minutes)
+   - Click any model button to see real-time AI inference!
 
 ### First Run
 
-⚠️ **Important**: The first execution will download the models (~2GB total). This may take several minutes depending on your internet connection.
+⚠️ **Important**: The first execution will download the models (~500MB total) directly to your browser. This may take a few minutes depending on your internet connection. Models are cached locally for subsequent visits.
 
 ## 🎮 How to Use
 
@@ -117,42 +117,50 @@ An interactive real-time demo showcasing the **3 most popular computer vision mo
 ## 🏗️ Architecture
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Frontend      │    │   FastAPI       │    │  Hugging Face   │
-│   (HTML/JS)     │◄──►│   Backend       │◄──►│    Models       │
-│                 │    │                 │    │                 │
-│ • Camera feed   │    │ • Image proc.   │    │ • CLIP          │
-│ • UI controls   │    │ • Model calls   │    │ • ViT           │
-│ • Visualization │    │ • API endpoints │    │ • DETR          │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Client-Side Browser                      │
+│                                                             │
+│  ┌─────────────────┐    ┌─────────────────┐                │
+│  │   Frontend      │    │ Transformers.js │                │
+│  │   (HTML/JS)     │◄──►│   AI Models     │                │
+│  │                 │    │                 │                │
+│  │ • Camera feed   │    │ • CLIP          │                │
+│  │ • UI controls   │    │ • ViT           │                │
+│  │ • Visualization │    │ • DETR          │                │
+│  └─────────────────┘    └─────────────────┘                │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ## 🔧 Technical Details
 
-- **Model loading**: Automatic download on first run (~2GB total)
-- **GPU support**: Automatically detected if available (CUDA/MPS)
-- **Memory usage**: 4-8GB RAM depending on models loaded
-- **Performance**: ~1-3 seconds per inference depending on hardware
+- **Client-side AI**: All models run directly in your browser using Transformers.js
+- **Model loading**: Automatic download on first run (~500MB total)
+- **WebAssembly**: Optimized inference using WASM and WebGL acceleration
+- **Memory usage**: 2-4GB RAM depending on models loaded
+- **Performance**: ~2-5 seconds per inference depending on device
 - **Supported formats**: JPEG, PNG images from webcam
+- **Privacy**: All processing happens locally - no data sent to servers
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
 
-| Problem                    | Solution                                                                                                     |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| 🎥 **Camera not working**  | • Check browser permissions<br>• Try a different browser<br>• Ensure camera isn't used by other apps         |
-| 🐌 **Slow inference**      | • First run downloads models (normal)<br>• Close other applications<br>• Use GPU if available                |
-| 💾 **Out of memory**       | • Close other applications<br>• Use a machine with more RAM<br>• Restart the backend                         |
-| 🌐 **Connection error**    | • Ensure backend is running on port 8000<br>• Check browser console for errors<br>• Verify firewall settings |
-| 📦 **Model loading fails** | • Check internet connection<br>• Clear Hugging Face cache<br>• Restart with `--reload`                       |
+| Problem                   | Solution                                                                                             |
+| ------------------------- | ---------------------------------------------------------------------------------------------------- |
+| 🎥 **Camera not working** | • Check browser permissions<br>• Try a different browser<br>• Ensure camera isn't used by other apps |
+| 🐌 **Slow inference**     | • First run downloads models (normal)<br>• Close other browser tabs<br>• Use a modern device         |
+| 💾 **Out of memory**      | • Close other browser tabs<br>• Use a device with more RAM<br>• Refresh the page                     |
+| 🌐 **Models won't load**  | • Check internet connection<br>• Clear browser cache<br>• Try a different browser                    |
+| 📦 **CORS errors**        | • Use HTTPS or localhost<br>• Don't open HTML file directly<br>• Use a local server                  |
 
 ### Performance Tips
 
-- **GPU Acceleration**: Install CUDA (NVIDIA) or use Apple Silicon for better performance
-- **Memory Management**: Close unnecessary applications before running
-- **Browser Choice**: Chrome and Firefox typically perform best
+- **Browser Choice**: Chrome and Firefox typically perform best with WebAssembly
+- **Memory Management**: Close unnecessary browser tabs before running
+- **Device**: Modern devices with more RAM will perform better
 - **Network**: Stable internet connection required for first-time model downloads
+- **HTTPS**: Use HTTPS for better performance and security features
 
 ## 🎯 Example Use Cases
 
@@ -201,26 +209,50 @@ Detect pedestrians, vehicles, traffic signs, road obstacles
 
 ## 🛠️ Development
 
-### API Endpoints
+### Client-Side Architecture
 
-- `GET /` - API information and available models
-- `POST /classify` - ViT image classification
-- `POST /clip` - CLIP zero-shot classification
-- `POST /detect` - DETR object detection
-- `POST /clip-custom` - CLIP with custom prompts
+This application runs entirely in the browser using:
+
+- **Transformers.js** - Client-side AI inference
+- **WebAssembly** - High-performance computation
+- **WebGL** - GPU acceleration when available
+- **Web Workers** - Non-blocking model execution
 
 ### Project Structure
 
 ```
 hf-vision-demo/
-├── backend/
-│   └── main.py          # FastAPI backend server
-├── frontend/
-│   └── index.html       # Web interface
-├── requirements.txt     # Python dependencies
-├── demo_script.py      # Demo and testing script
+├── index.html           # Main application (client-side)
+├── vercel.json         # Vercel deployment configuration
+├── package.json        # Project metadata
+├── backend/            # Legacy server-side code (deprecated)
+├── frontend/           # Legacy frontend (deprecated)
 └── README.md           # This file
 ```
+
+### 🚀 Deployment
+
+#### Deploy to Vercel
+
+1. **Fork this repository**
+2. **Connect to Vercel**:
+   - Go to [vercel.com](https://vercel.com)
+   - Import your forked repository
+   - Deploy automatically!
+
+#### Deploy to Netlify
+
+1. **Fork this repository**
+2. **Connect to Netlify**:
+   - Go to [netlify.com](https://netlify.com)
+   - Drag and drop the `hf-vision-demo` folder
+   - Deploy instantly!
+
+#### Deploy to GitHub Pages
+
+1. **Enable GitHub Pages** in repository settings
+2. **Select source**: Deploy from main branch
+3. **Access**: `https://yourusername.github.io/huggin-face/hf-vision-demo/`
 
 ## 🤝 Contributing
 
@@ -237,6 +269,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - [Hugging Face](https://huggingface.co/) for providing the amazing models and transformers library
+- [Transformers.js](https://huggingface.co/docs/transformers.js) for enabling client-side AI inference
 - [OpenAI](https://openai.com/) for CLIP
 - [Google](https://github.com/google-research/vision_transformer) for Vision Transformer
 - [Facebook Research](https://github.com/facebookresearch/detr) for DETR
