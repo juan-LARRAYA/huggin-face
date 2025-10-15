@@ -55,7 +55,7 @@ An interactive real-time demo showcasing the **3 most popular computer vision mo
 
 ### 🌐 Live Demo
 
-**Deployed on Vercel:** [https://hf-vision-demo.vercel.app](https://hf-vision-demo.vercel.app)
+**Deployed on Vercel:** [https://hf-vision-demo-191r2h6d6-juanlarraya00-gmailcoms-projects.vercel.app](https://hf-vision-demo-191r2h6d6-juanlarraya00-gmailcoms-projects.vercel.app)
 
 No installation required! Just visit the link and start using AI models directly in your browser.
 
